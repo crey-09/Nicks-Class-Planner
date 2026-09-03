@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1788392769481,
+      "tag": "0000_bent_franklin_storm",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1788393624612,
+      "tag": "0001_stiff_obadiah_stane",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1788393892303,
+      "tag": "0002_perpetual_northstar",
+      "breakpoints": true
+    }
+  ]
+}
