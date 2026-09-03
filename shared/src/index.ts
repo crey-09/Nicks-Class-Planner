@@ -124,6 +124,8 @@ export interface ConnectorInfo {
 
 export interface DashboardData {
   needsLogin: Source[];
+  /** One-time setup nudges, e.g. confirm ENGR 131 section days. */
+  setup: { sourceId: number; message: string }[];
   dueSoon: TodoItem[];
   overdue: TodoItem[];
   todayShifts: Shift[];
