@@ -1,4 +1,4 @@
-import { eq, desc } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import type { Db } from '../db/index.js';
 import { sources, syncRuns } from '../db/schema.js';
 import { getSyncIntervalMinutes } from '../db/settings.js';
@@ -79,8 +79,7 @@ export function createScheduler(db: Db, log: { info(msg: string): void; warn(msg
   function pruneRuns() {
     // Keep the last 50 runs per source.
     for (const s of db.select({ id: sources.id }).from(sources).all()) {
-      const old = db.select({ id: syncRuns.id }).from(syncRuns).where(eq(syncRuns.sourceId, s.id)).orderBy(desc(syncRuns.id)).offset(50).all();
-      for (const r of old) db.delete(syncRuns).where(eq(syncRuns.id, r.id)).run();
+      db.run(sql`delete from sync_runs where source_id = ${s.id} and id not in (select id from sync_runs where source_id = ${s.id} order by id desc limit 50)`);
     }
   }
 

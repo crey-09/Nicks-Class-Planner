@@ -48,6 +48,12 @@ export default function Dashboard() {
           <Link to="/sources"><button className="small">Go to Sources</button></Link>
         </div>
       ))}
+      {d?.setup.map((n) => (
+        <div className="banner" key={'setup' + n.sourceId} style={{ background: 'var(--accent-soft)', borderColor: 'var(--accent)' }}>
+          <span>🎓 {n.message}</span>
+          <Link to="/sources"><button className="small">Set it up</button></Link>
+        </div>
+      ))}
       <div className="grid cols-3">
         <div className="card">
           <div className="stat" style={{ color: d?.overdue.length ? 'var(--danger)' : undefined }}>{d?.overdue.length ?? '–'}</div>

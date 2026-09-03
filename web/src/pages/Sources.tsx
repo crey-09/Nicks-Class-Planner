@@ -153,6 +153,7 @@ export default function Sources() {
                     {!s.enabled && <span> · paused</span>}
                   </div>
                   {s.lastError && s.status !== 'ok' && <div className="small" style={{ color: 'var(--danger)', marginTop: 4 }}>{s.lastError}</div>}
+                  {s.connector === 'engr131' && !(s.config as any)?.sectionConfirmed && <div className="small" style={{ color: 'var(--accent)', marginTop: 4 }}>Added automatically. Click Edit to confirm your section's meeting days and class time.</div>}
                 </div>
                 <div className="toolbar">
                   {c?.needsBrowser && loginFor !== s.id && <button className={s.status === 'needs_login' || s.status === 'never' ? 'primary' : ''} onClick={() => connect.mutate(s.id)} disabled={connect.isPending}>{s.status === 'ok' ? 'Reconnect' : 'Connect'}</button>}

@@ -23,14 +23,15 @@ Go to **Sources** and add, in this order:
 
 | Source | What it gives you | Login? |
 | --- | --- | --- |
-| ENGR 131 course site | Every assignment on the course schedule, with due dates | No |
+| ENGR 131 course site | Every assignment on the course schedule, with due dates. Added automatically. | No |
 | Brightspace | Assignments, quizzes and dated content from all courses | Yes, once |
 | Gradescope | Assignments, due dates, whether you submitted, scores | Yes, once |
 | Calendar feed (.ics) | Your work shifts from Sling / Homebase / 7shifts | No |
 
-**ENGR 131 site:** set the two days your section meets (for example `Mon,Wed`) and the class start
-time. The schedule says things like "Due: Class 2A"; that becomes the first meeting of week 2 at your
-class time.
+**ENGR 131 site:** added for you on first launch, and the whole semester's schedule is imported
+before you even open the app. Click **Edit** on it once to set the two days your section meets (for
+example `Mon,Wed`) and the class start time. The schedule says things like "Due: Class 2A"; that
+becomes the first meeting of week 2 at your class time.
 
 **Brightspace and Gradescope:** click **Connect**. A browser window opens at the login page. Sign in
 like normal (Purdue SSO and Duo), wait until you see the site's home page, then come back and click

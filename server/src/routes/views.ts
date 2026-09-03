@@ -51,6 +51,9 @@ export default async function viewRoutes(app: FastifyInstance, { db }: { db: Db 
     const visible = or(isNull(assignments.id), eq(assignments.hidden, false))!;
     return {
       needsLogin: db.select().from(sources).where(and(eq(sources.status, 'needs_login'), eq(sources.enabled, true))).all() as any,
+      setup: db.select().from(sources).where(eq(sources.connector, 'engr131')).all()
+        .filter((s) => s.enabled && !(s.config as any)?.sectionConfirmed)
+        .map((s) => ({ sourceId: s.id, message: `Confirm which days your ${s.name.replace(/ site$/, '')} section meets. Until then, "Class 2A"-style due dates assume Mon/Wed at 8:30.` })),
       overdue: listTodo(db, and(eq(tasks.done, false), lt(tasks.dueAt, now.toISOString()), visible)),
       dueSoon: listTodo(db, and(eq(tasks.done, false), gte(tasks.dueAt, now.toISOString()), lt(tasks.dueAt, week.to), visible)),
       todayShifts: db.select().from(shifts).where(and(lt(shifts.startAt, today.to), gte(shifts.endAt, today.from))).orderBy(asc(shifts.startAt)).all(),

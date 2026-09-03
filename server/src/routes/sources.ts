@@ -36,8 +36,12 @@ export default async function sourceRoutes(app: FastifyInstance, { db, scheduler
   app.patch('/api/sources/:id', async (req, reply) => {
     const id = idParam(req.params);
     const body = parseBody(sourceBody.partial().omit({ connector: true }), req.body);
-    const row = db.update(sources).set(body).where(eq(sources.id, id)).returning().get();
-    return row ?? notFound(reply);
+    const current = db.select().from(sources).where(eq(sources.id, id)).get();
+    if (!current) return notFound(reply);
+    if (body.config && current.connector === 'engr131') body.config = { ...body.config, sectionConfirmed: true };
+    const row = db.update(sources).set(body).where(eq(sources.id, id)).returning().get()!;
+    if (body.config) scheduler.runSource(id).catch(() => {});
+    return row;
   });
 
   app.delete('/api/sources/:id', async (req, reply) => {
