@@ -1,0 +1,20 @@
+{
+  "name": "nick-manager",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Local student planner: assignments, shifts, calendar, and planner in one place.",
+  "workspaces": ["shared", "server", "web"],
+  "scripts": {
+    "dev": "concurrently -k -n server,web -c blue,green \"npm:dev --workspace=server\" \"npm:dev --workspace=web\"",
+    "build": "npm run build --workspace=shared && npm run build --workspace=web && npm run build --workspace=server",
+    "start": "npm run start --workspace=server",
+    "test": "npm run test --workspace=server",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "db:generate": "npm run db:generate --workspace=server"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "typescript": "^5.7.3"
+  },
+  "engines": { "node": ">=20" }
+}
