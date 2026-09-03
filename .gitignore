@@ -5,3 +5,6 @@ data/
 .env
 .DS_Store
 server/drizzle/meta/_journal.json.bak
+VERSION
+update.zip
+update_tmp/

@@ -25,6 +25,8 @@ echo  [3/4] Building...
 call npm run build
 if errorlevel 1 goto :fail
 echo.
+if not exist .git powershell -NoProfile -ExecutionPolicy Bypass -Command "(Invoke-RestMethod 'https://api.github.com/repos/crey-09/Nicks-Class-Planner/commits/main').sha" > VERSION 2>nul
+echo.
 echo  [4/4] Registering auto-start at login...
 schtasks /Create /F /SC ONLOGON /TN "Nick Manager" /TR "wscript.exe \"%CD%\scripts\start-hidden.vbs\"" /RL LIMITED >nul
 if errorlevel 1 (

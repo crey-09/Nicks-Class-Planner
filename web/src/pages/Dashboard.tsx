@@ -25,6 +25,7 @@ function TodoRow({ item, onToggle }: { item: TodoItem; onToggle: (done: boolean)
 export default function Dashboard() {
   const qc = useQueryClient();
   const dash = useQuery({ queryKey: ['dashboard'], queryFn: Api.dashboard, refetchInterval: 60_000 });
+  const update = useQuery({ queryKey: ['update'], queryFn: () => Api.updateStatus(), retry: false, staleTime: 60 * 60_000 });
   const [quick, setQuick] = useState('');
   const invalidate = () => { qc.invalidateQueries({ queryKey: ['dashboard'] }); qc.invalidateQueries({ queryKey: ['todo'] }); };
   const toggle = useMutation({ mutationFn: ({ id, done }: { id: number; done: boolean }) => Api.updateTask(id, { done }), onSuccess: invalidate });
@@ -48,6 +49,12 @@ export default function Dashboard() {
           <Link to="/sources"><button className="small">Go to Sources</button></Link>
         </div>
       ))}
+      {update.data?.updateAvailable && !update.data.error && (
+        <div className="banner">
+          <span>⬆️ A new version of Nick Manager is available.</span>
+          <Link to="/settings"><button className="small">Update</button></Link>
+        </div>
+      )}
       {d?.setup.map((n) => (
         <div className="banner" key={'setup' + n.sourceId} style={{ background: 'var(--accent-soft)', borderColor: 'var(--accent)' }}>
           <span>🎓 {n.message}</span>

@@ -17,6 +17,13 @@ sign in yourself in a separate browser window, and only that browser's session i
 
 To stop it: `scripts\stop-windows.cmd`. To start it by hand: `scripts\start.cmd`.
 
+## Updating
+
+When a new version is published, Today shows an "update available" banner and Settings gets an
+**Update now** button. Clicking it opens a window that stops the app, downloads the latest version,
+rebuilds, and starts it again. Your data is untouched. You can also run `scripts\update-windows.cmd`
+directly. It uses `git pull` if the folder was cloned, otherwise it downloads the latest zip from GitHub.
+
 ## First-time use
 
 Go to **Sources** and add, in this order:
@@ -79,7 +86,7 @@ Node + TypeScript monorepo (npm workspaces):
 shared/   API types shared by server and web
 server/   Fastify API, SQLite (Drizzle), sync engine, Playwright session, Google integration
 web/      Vite + React front end
-scripts/  Windows install / start / stop
+scripts/  Windows install / start / stop / update (plus Mac equivalents)
 data/     created at runtime: nick.db, browser-profile/, google-tokens.json, server.log (gitignored)
 ```
 
@@ -91,6 +98,10 @@ npm test           # vitest: connector parsers and reconcile logic
 npm run build      # web/dist + server/dist; `npm start` serves both on :3000
 npm run db:generate  # after editing server/src/db/schema.ts
 ```
+
+Updates: `server/src/update.ts` compares the installed commit (`.git` or a `VERSION` file written by
+zip installs) with the head of `main` on GitHub once an hour, and `POST /api/update/run` launches the
+update script detached. Merging to `main` is what publishes an update, so keep `main` releasable.
 
 Adding a connector: one file in `server/src/connectors/` implementing `Connector` from `types.ts`,
 registered in `registry.ts`. Return raw courses/assignments/shifts/events and `sync/reconcile.ts` does
