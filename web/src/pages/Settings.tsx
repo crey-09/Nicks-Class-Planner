@@ -18,6 +18,9 @@ export default function Settings() {
   const connect = useMutation({ mutationFn: Api.googleConnect, onSuccess: () => setTimeout(() => qc.invalidateQueries({ queryKey: ['google'] }), 1500) });
   const disconnect = useMutation({ mutationFn: Api.googleDisconnect, onSuccess: () => qc.invalidateQueries({ queryKey: ['google'] }) });
   const sync = useMutation({ mutationFn: Api.googleSync, onSuccess: () => qc.invalidateQueries() });
+  const update = useQuery({ queryKey: ['update'], queryFn: () => Api.updateStatus(), retry: false });
+  const recheck = useMutation({ mutationFn: () => Api.updateStatus(true), onSuccess: (d) => qc.setQueryData(['update'], d) });
+  const runUpdate = useMutation({ mutationFn: Api.runUpdate });
 
   return (
     <div>
@@ -35,6 +38,32 @@ export default function Settings() {
             <ErrorBox error={save.error} />
             <div className="form-actions"><button className="primary" disabled={save.isPending}>{save.isSuccess ? 'Saved ✓' : 'Save'}</button></div>
           </form>
+        </div>
+        <div className="card">
+          <h2>Updates</h2>
+          <div style={{ marginTop: 12 }}>
+            {update.data && (
+              <>
+                <div className="small">Installed: <code>{update.data.local ? update.data.local.slice(0, 7) : 'unknown'}</code>{update.data.remote && <> · Latest: <code>{update.data.remote.slice(0, 7)}</code>{update.data.remoteDate && <span className="muted"> ({new Date(update.data.remoteDate).toLocaleDateString()})</span>}</>}</div>
+                {update.data.error && <div className="small" style={{ color: 'var(--warn)', marginTop: 6 }}>Couldn't check: {update.data.error}</div>}
+                {update.data.updateAvailable && !update.data.error && (
+                  <div className="banner" style={{ marginTop: 10, marginBottom: 10 }}>
+                    <span>⬆️ <b>Update available.</b>{update.data.remoteMessage && <> Latest change: {update.data.remoteMessage}</>}</span>
+                  </div>
+                )}
+                {!update.data.updateAvailable && !update.data.error && <div className="small muted" style={{ marginTop: 6 }}>You're up to date.</div>}
+              </>
+            )}
+            {runUpdate.isSuccess ? (
+              <div className="small" style={{ marginTop: 10 }}>Updating in a separate window. The app stops, rebuilds and restarts itself. Reload this page in a minute or two.</div>
+            ) : (
+              <div className="toolbar" style={{ marginTop: 10 }}>
+                {update.data?.updateAvailable && <button className="primary" onClick={() => runUpdate.mutate()} disabled={runUpdate.isPending}>Update now</button>}
+                <button onClick={() => recheck.mutate()} disabled={recheck.isPending}>{recheck.isPending ? 'Checking…' : 'Check again'}</button>
+              </div>
+            )}
+            <ErrorBox error={runUpdate.error} />
+          </div>
         </div>
         <div className="card">
           <h2>Google account</h2>

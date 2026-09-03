@@ -1,6 +1,6 @@
 import type {
   Assignment, CalendarEvent, ConnectorInfo, Course, CourseLink, DashboardData, PlanBlock,
-  Settings, Shift, Source, SourceCourse, SyncRun, Task, TodoItem,
+  Settings, Shift, Source, SourceCourse, SyncRun, Task, TodoItem, UpdateStatus,
 } from '@nick/shared';
 
 export class ApiError extends Error {
@@ -78,6 +78,9 @@ export const Api = {
   sourceRuns: (id: number) => api<SyncRun[]>(`/api/sources/${id}/runs`),
   sourceCourses: (sourceId: number) => api<SourceCourse[]>(`/api/source-courses?sourceId=${sourceId}`),
   updateSourceCourse: (id: number, b: Partial<SourceCourse>) => api<SourceCourse>(`/api/source-courses/${id}`, { method: 'PATCH', json: b }),
+
+  updateStatus: (force = false) => api<UpdateStatus>(`/api/update/status${force ? '?force=1' : ''}`),
+  runUpdate: () => api<{ started: boolean }>('/api/update/run', { method: 'POST' }),
 
   googleStatus: () => api<{ configured: boolean; connected: boolean; calendarId: string | null; email: string | null }>('/api/google/status'),
   googleConnect: () => api<{ ok: boolean; url?: string }>('/api/google/connect', { method: 'POST' }),

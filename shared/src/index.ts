@@ -163,3 +163,13 @@ export interface SourceCourse {
   courseId: number | null;
   ignored: boolean;
 }
+
+export interface UpdateStatus {
+  local: string | null;
+  remote: string | null;
+  remoteDate: string | null;
+  remoteMessage: string | null;
+  updateAvailable: boolean;
+  checkedAt: string;
+  error: string | null;
+}

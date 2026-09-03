@@ -12,6 +12,7 @@ import scheduleRoutes from './routes/schedule.js';
 import viewRoutes from './routes/views.js';
 import sourceRoutes from './routes/sources.js';
 import googleRoutes from './routes/google.js';
+import updateRoutes from './routes/update.js';
 import { createScheduler, type Scheduler } from './sync/scheduler.js';
 import { WEB_DIST } from './config.js';
 
@@ -43,6 +44,7 @@ export async function buildApp(db: Db, opts: { logger?: boolean; serveWeb?: bool
   await app.register(viewRoutes, { db });
   await app.register(sourceRoutes, { db, scheduler });
   await app.register(googleRoutes, { db });
+  await app.register(updateRoutes);
 
   if (opts.serveWeb && fs.existsSync(path.join(WEB_DIST, 'index.html'))) {
     await app.register(fastifyStatic, { root: WEB_DIST, wildcard: false });
